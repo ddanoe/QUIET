@@ -1,0 +1,4 @@
+{"whatsapp":"5970000000","currency":"SRD","products":[
+{"id":"p1","name":"Night Rider Hoodie","price":950,"category":"Hoodies","desc":"Heavyweight fleece, oversized fit, QUIET logo on the back.","sizes":["S","M","L","XL","XXL"],"colors":[{"name":"Black","hex":"#0b0b0d"},{"name":"Midnight blue","hex":"#17233f"}],"images":[]},
+{"id":"p2","name":"Apex Tee","price":450,"category":"Shirts","desc":"Soft 100% cotton, boxy cut, logo on the chest.","sizes":["S","M","L","XL"],"colors":[{"name":"Black","hex":"#0b0b0d"},{"name":"Bone","hex":"#e8e6df"}],"images":[]}
+]}

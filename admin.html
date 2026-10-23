@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>QUIET admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080b;--panel:#101218;--line:#222631;--text:#ecebe6;--mute:#8a90a0;--blue:#3d7bff;--d:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;--b:'Instrument Sans',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font:400 15px/1.5 var(--b)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+header img{height:34px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,.b{font:600 14px var(--b);border-radius:999px;border:1px solid var(--line);background:none;color:var(--text);padding:9px 18px;cursor:pointer}
+.pri{background:var(--blue);border-color:var(--blue);color:#fff}
+.dng{color:#ff8a8a}
+.wrap{display:grid;grid-template-columns:300px 1fr;gap:24px;max-width:1100px;margin:0 auto;padding:24px}
+h2{font:900 30px/1 var(--d);margin-bottom:14px}
+.list{display:flex;flex-direction:column;gap:8px}
+.it{display:flex;gap:10px;align-items:center;text-align:left;width:100%;border-radius:8px;padding:8px;background:var(--panel)}
+.it[aria-current=true]{border-color:var(--blue)}
+.it img,.it i{width:44px;height:44px;border-radius:4px;object-fit:cover;background:var(--line);flex:none}
+.it b{display:block;font-weight:600}.it small{color:var(--mute)}
+form,.set{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;display:grid;gap:14px}
+.set{margin:24px auto 0;max-width:1052px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+label{display:grid;gap:5px;color:var(--mute);font-size:13px}
+input,textarea,select{background:#0a0b0f;border:1px solid var(--line);border-radius:6px;color:var(--text);padding:10px;font:15px var(--b);width:100%}
+textarea{min-height:70px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cr{display:grid;grid-template-columns:1fr 54px 36px;gap:8px;margin-bottom:6px}
+.cr input[type=color]{padding:2px;height:42px}
+.imgs{display:flex;gap:8px;flex-wrap:wrap}
+.imgs div{position:relative}
+.imgs img{width:82px;height:82px;object-fit:cover;border-radius:6px;display:block}
+.imgs button{position:absolute;top:3px;right:3px;padding:0;width:24px;height:24px;background:#000c;border-radius:50%}
+#msg{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--blue);padding:12px 20px;border-radius:999px;display:none;max-width:90vw}
+.hint{color:var(--mute);font-size:13px}
+@media(max-width:800px){.wrap{grid-template-columns:1fr}}
+</style></head><body>
+<header><img src="logo.png" alt="QUIET"><div class="row">
+<button id="add">Add product</button><button id="dl">Download products.json</button><button class="pri" id="pub">Publish to site</button></div></header>
+<section class="set" aria-label="Shop settings">
+<label>WhatsApp number (country code, digits only)<input id="wa" inputmode="numeric" placeholder="5978123456"></label>
+<label>Currency label<input id="cu" placeholder="SRD"></label>
+<label>GitHub repo (owner/name)<input id="gr" placeholder="yourname/quiet"></label>
+<label>GitHub token<input id="gt" type="password" autocomplete="off" placeholder="Stays in this browser only"></label></section>
+<div class="wrap"><div><h2>Products</h2><div class="list" id="list"></div></div>
+<form id="f" hidden>
+<div class="two"><label>Name<input id="n" required></label><label>Category<input id="c" list="cats" placeholder="Hoodies"><datalist id="cats"><option>Hoodies<option>Shirts</datalist></label></div>
+<div class="two"><label>Price<input id="p" type="number" min="0" step="any" required></label><label>Sizes (comma separated)<input id="s" placeholder="S, M, L, XL"></label></div>
+<label>Description<textarea id="d"></textarea></label>
+<div><div class="hint" style="margin-bottom:6px">Colors</div><div id="cols"></div><button type="button" id="ac">Add color</button></div>
+<div><div class="hint" style="margin-bottom:6px">Photos (the first one is the cover)</div><div class="imgs" id="im"></div><input id="up" type="file" accept="image/*" multiple style="margin-top:8px"></div>
+<div class="row"><button class="pri" type="submit">Save product</button><button type="button" class="dng" id="del">Delete product</button></div>
+</form></div>
+<p class="hint" style="text-align:center;padding-bottom:40px">Changes stay in this browser until you publish. Publishing updates products.json in your repo, and the site refreshes within a minute.</p>
+<div id="msg" role="status"></div>
+<script>
+const $=s=>document.querySelector(s),L=localStorage;
+let D,cur=null,imgs=[];
+const toast=t=>{const m=$('#msg');m.textContent=t;m.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>m.style.display='none',3500)};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function init(){
+ try{D=JSON.parse(L.getItem('quiet-draft'))}catch{}
+ if(!D)try{D=await (await fetch('products.json?'+Date.now())).json()}catch{D={whatsapp:'',currency:'SRD',products:[]}}
+ $('#wa').value=D.whatsapp;$('#cu').value=D.currency;$('#gr').value=L.getItem('q-repo')||'';$('#gt').value=L.getItem('q-token')||'';list();
+}
+const save=()=>{D.whatsapp=$('#wa').value.replace(/\D/g,'');D.currency=$('#cu').value.trim();L.setItem('quiet-draft',JSON.stringify(D));L.setItem('q-repo',$('#gr').value.trim());L.setItem('q-token',$('#gt').value.trim())};
+['#wa','#cu','#gr','#gt'].forEach(i=>$(i).onchange=()=>{save();toast('Settings saved')});
+function list(){
+ $('#list').innerHTML=D.products.length?D.products.map(p=>`<button class="it" data-id="${esc(p.id)}" aria-current="${cur&&cur.id==p.id}">${p.images[0]?`<img src="${p.images[0]}" alt="">`:'<i></i>'}<span><b>${esc(p.name)}</b><small>${esc(p.category||'')} · ${D.currency} ${p.price}</small></span></button>`).join(''):'<p class="hint">No products yet. Select “Add product” to start.</p>';
+}
+$('#list').onclick=e=>{const b=e.target.closest('.it');if(b)edit(D.products.find(p=>p.id==b.dataset.id))};
+$('#add').onclick=()=>edit({id:'p'+Date.now(),name:'',price:'',category:'',desc:'',sizes:['S','M','L','XL'],colors:[{name:'Black',hex:'#0b0b0d'}],images:[],isNew:true});
+function edit(p){
+ cur=p;imgs=[...p.images];$('#f').hidden=false;
+ $('#n').value=p.name;$('#c').value=p.category||'';$('#p').value=p.price;$('#s').value=p.sizes.join(', ');$('#d').value=p.desc||'';
+ $('#cols').innerHTML='';p.colors.forEach(col);pics();list();$('#f').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function col(c={name:'',hex:'#0b0b0d'}){
+ const r=document.createElement('div');r.className='cr';
+ r.innerHTML=`<input placeholder="Color name" value="${esc(c.name)}" aria-label="Color name"><input type="color" value="${esc(c.hex)}" aria-label="Color"><button type="button" aria-label="Remove color">×</button>`;
+ r.querySelector('button').onclick=()=>r.remove();$('#cols').append(r);
+}
+$('#ac').onclick=()=>col();
+function pics(){
+ $('#im').innerHTML=imgs.map((s,i)=>`<div><img src="${s}" alt="Photo ${i+1}"><button type="button" data-i="${i}" aria-label="Remove photo">×</button></div>`).join('');
+}
+$('#im').onclick=e=>{const i=e.target.dataset.i;if(i!=null){imgs.splice(+i,1);pics()}};
+$('#up').onchange=async e=>{
+ for(const f of e.target.files)imgs.push(await shrink(f));
+ e.target.value='';pics();
+};
+const shrink=f=>new Promise(res=>{const im=new Image();im.onload=()=>{const k=Math.min(1,720/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};im.src=URL.createObjectURL(f)});
+$('#f').onsubmit=e=>{
+ e.preventDefault();
+ const p={id:cur.id,name:$('#n').value.trim(),category:$('#c').value.trim(),price:+$('#p').value,desc:$('#d').value.trim(),
+  sizes:$('#s').value.split(',').map(s=>s.trim()).filter(Boolean),
+  colors:[...document.querySelectorAll('.cr')].map(r=>({name:r.children[0].value.trim(),hex:r.children[1].value})).filter(c=>c.name),images:imgs};
+ const i=D.products.findIndex(x=>x.id==p.id);i<0?D.products.push(p):D.products[i]=p;
+ cur=p;save();list();toast('Product saved. Publish to put it on the site.');
+};
+$('#del').onclick=()=>{
+ if(!confirm('Delete this product?'))return;
+ D.products=D.products.filter(p=>p.id!=cur.id);cur=null;$('#f').hidden=true;save();list();toast('Product deleted');
+};
+$('#dl').onclick=()=>{save();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D,null,1)],{type:'application/json'}));a.download='products.json';a.click()};
+$('#pub').onclick=async()=>{
+ save();const repo=$('#gr').value.trim(),tok=$('#gt').value.trim();
+ if(!repo||!tok)return toast('Add your GitHub repo and token above first.');
+ if(!D.whatsapp)return toast('Add your WhatsApp number first.');
+ const u=`https://api.github.com/repos/${repo}/contents/products.json`,h={Authorization:'Bearer '+tok,Accept:'application/vnd.github+json'};
+ try{
+  const g=await fetch(u,{headers:h});const sha=g.ok?(await g.json()).sha:undefined;
+  const r=await fetch(u,{method:'PUT',headers:h,body:JSON.stringify({message:'Update products',sha,content:btoa(unescape(encodeURIComponent(JSON.stringify(D,null,1))))})});
+  r.ok?toast('Published. The site updates in about a minute.'):toast('Publish failed: '+((await r.json()).message||r.status));
+ }catch{toast('Couldn’t reach GitHub. Check your connection and try again.')}
+};
+init();
+</script></body></html>

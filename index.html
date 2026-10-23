@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QUIET — Motorcycle hoodies &amp; tees</title>
+<meta name="description" content="Motorcycle hoodies and shirts. Order in a minute on WhatsApp.">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080b;--panel:#101218;--line:#222631;--text:#ecebe6;--mute:#8a90a0;--blue:#3d7bff;--d:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;--b:'Instrument Sans',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--text);font:400 16px/1.55 var(--b);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.hero{min-height:88svh;display:grid;place-items:center;text-align:center;padding:48px 24px;background:radial-gradient(60% 50% at 50% 45%,rgba(61,123,255,.13),transparent 70%)}
+.hero img{width:min(760px,88vw);height:auto;animation:in 1.4s cubic-bezier(.2,.7,.2,1) both}
+@keyframes in{from{opacity:0;filter:blur(18px);transform:scale(1.04)}}
+.hero p{margin:28px auto 32px;color:var(--mute);max-width:34ch;font-size:18px}
+.btn{display:inline-block;background:var(--blue);color:#fff;border:0;border-radius:999px;padding:14px 30px;font:600 16px var(--b);text-decoration:none;cursor:pointer;transition:transform .15s,background .15s}
+.btn:hover{background:#5a91ff;transform:translateY(-2px)}
+main{max-width:1180px;margin:0 auto;padding:40px 24px 90px}
+.bar{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+h2{font:900 clamp(40px,7vw,72px)/.95 var(--d);letter-spacing:.01em}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:none;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:8px 18px;font:500 14px var(--b);cursor:pointer}
+.chip[aria-pressed=true]{color:var(--text);border-color:var(--blue)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.card{background:none;border:0;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.ph{aspect-ratio:4/5;background:var(--panel);border-radius:6px;overflow:hidden;display:grid;place-items:center;border:1px solid var(--line);transition:border-color .2s}
+.card:hover .ph{border-color:var(--blue)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph span{font:900 28px var(--d);color:var(--line);padding:20px;text-align:center}
+.card h3{font:700 24px/1.1 var(--d);margin:14px 0 2px;letter-spacing:.02em}
+.card .pr{color:var(--mute)}
+.empty{color:var(--mute);grid-column:1/-1}
+dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:0;width:min(880px,94vw);max-height:92svh;overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.8);backdrop-filter:blur(4px)}
+.dl{display:grid;grid-template-columns:1fr 1fr}
+.dl .ph{border:0;border-radius:0;height:100%;aspect-ratio:auto;min-height:340px}
+.thumbs{display:flex;gap:6px;padding:8px;background:#0a0b0f}
+.thumbs img{width:54px;height:54px;object-fit:cover;border-radius:4px;opacity:.5;cursor:pointer;border:1px solid transparent}
+.thumbs img.on{opacity:1;border-color:var(--blue)}
+.info{padding:28px;display:flex;flex-direction:column;gap:18px}
+.info h3{font:900 40px/1 var(--d)}
+.info .pr{font-size:20px}
+.info p{color:var(--mute)}
+fieldset{border:0;padding:0}
+legend{font-weight:600;margin-bottom:8px}
+legend small{color:var(--mute);font-weight:400;margin-left:6px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts input{position:absolute;opacity:0}
+.opts label{min-width:46px;text-align:center;padding:9px 14px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.opts input:checked+label{border-color:var(--blue);background:rgba(61,123,255,.14)}
+.opts input:focus-visible+label{outline:2px solid var(--blue);outline-offset:2px}
+.sw{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:8px;vertical-align:-2px;border:1px solid #555}
+.qty{display:flex;align-items:center;gap:14px}
+.qty button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--text);font-size:20px;cursor:pointer}
+.x{position:absolute;top:10px;right:12px;background:rgba(0,0,0,.6);border:0;color:var(--text);width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;z-index:2}
+.err{color:#ff8a8a;min-height:1.4em;font-size:14px}
+footer{border-top:1px solid var(--line);padding:32px 24px;text-align:center;color:var(--mute);font-size:14px}
+@media(max-width:700px){.dl{grid-template-columns:1fr}.dl .ph{min-height:260px;aspect-ratio:1}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<header class="hero"><div><img src="logo.png" alt="QUIET" width="900" height="370">
+<p>Hoodies and tees for people who let the engine do the talking.</p>
+<a class="btn" href="#shop">Shop the drop</a></div></header>
+<main id="shop"><div class="bar"><h2>The drop</h2><div class="chips" id="chips"></div></div>
+<div class="grid" id="grid"><p class="empty">Loading…</p></div></main>
+<footer>© QUIET. Orders are confirmed on WhatsApp.</footer>
+<dialog id="dlg"><button class="x" id="close" aria-label="Close">×</button><div class="dl">
+<div><div class="ph" id="big"></div><div class="thumbs" id="th"></div></div>
+<form class="info" id="f"><div><h3 id="n"></h3><div class="pr" id="p"></div></div><p id="d"></p>
+<fieldset><legend>Color<small id="cn"></small></legend><div class="opts" id="co"></div></fieldset>
+<fieldset><legend>Size</legend><div class="opts" id="sz"></div></fieldset>
+<div class="qty"><span>Quantity</span><button type="button" id="mi" aria-label="Fewer">−</button><b id="q">1</b><button type="button" id="pl" aria-label="More">+</button></div>
+<div class="err" id="err" role="alert"></div>
+<button class="btn" type="submit">Order on WhatsApp</button></form></div></dialog>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let D={whatsapp:'',currency:'',products:[]},cat='All',cur,qty=1;
+const money=n=>`${D.currency} ${Number(n).toLocaleString('en-US')}`;
+const ph=(p,i=0)=>p.images&&p.images[i]?`<img src="${p.images[i]}" alt="${esc(p.name)}" loading="lazy">`:`<span>${esc(p.name)}</span>`;
+fetch('products.json?'+Date.now()).then(r=>r.json()).then(j=>{D=j;draw()}).catch(()=>{$('#grid').innerHTML='<p class="empty">Couldn’t load the shop. Refresh the page to try again.</p>'});
+function draw(){
+ const cats=['All',...new Set(D.products.map(p=>p.category).filter(Boolean))];
+ $('#chips').innerHTML=cats.length>2?cats.map(c=>`<button class="chip" aria-pressed="${c==cat}" data-c="${esc(c)}">${esc(c)}</button>`).join(''):'';
+ const L=D.products.filter(p=>cat=='All'||p.category==cat);
+ $('#grid').innerHTML=L.length?L.map(p=>`<button class="card" data-id="${esc(p.id)}"><div class="ph">${ph(p)}</div><h3>${esc(p.name)}</h3><div class="pr">${money(p.price)}</div></button>`).join(''):'<p class="empty">New pieces are on the way. Check back soon.</p>';
+}
+$('#chips').onclick=e=>{const c=e.target.dataset.c;if(c){cat=c;draw()}};
+$('#grid').onclick=e=>{const b=e.target.closest('.card');if(b)open(b.dataset.id)};
+function open(id){
+ cur=D.products.find(p=>p.id==id);qty=1;$('#q').textContent=1;$('#err').textContent='';
+ $('#n').textContent=cur.name;$('#p').textContent=money(cur.price);$('#d').textContent=cur.desc||'';
+ $('#co').innerHTML=(cur.colors||[]).map((c,i)=>`<span><input type="radio" name="c" id="c${i}" value="${esc(c.name)}" ${i?'':'checked'}><label for="c${i}"><i class="sw" style="background:${esc(c.hex)}"></i>${esc(c.name)}</label></span>`).join('');
+ $('#sz').innerHTML=(cur.sizes||[]).map(s=>`<span><input type="radio" name="s" id="s${esc(s)}" value="${esc(s)}"><label for="s${esc(s)}">${esc(s)}</label></span>`).join('');
+ pic(0);$('#dlg').showModal();
+}
+function pic(i){
+ $('#big').innerHTML=ph(cur,i);
+ $('#th').innerHTML=(cur.images||[]).length>1?cur.images.map((s,j)=>`<img src="${s}" class="${j==i?'on':''}" data-i="${j}" alt="Photo ${j+1}">`).join(''):'';
+}
+$('#th').onclick=e=>{if(e.target.dataset.i)pic(+e.target.dataset.i)};
+$('#close').onclick=()=>$('#dlg').close();
+$('#dlg').onclick=e=>{if(e.target==$('#dlg'))$('#dlg').close()};
+$('#mi').onclick=()=>{qty=Math.max(1,qty-1);$('#q').textContent=qty};
+$('#pl').onclick=()=>{qty=Math.min(20,qty+1);$('#q').textContent=qty};
+$('#co').onchange=e=>$('#cn').textContent=e.target.value;
+$('#f').onsubmit=e=>{
+ e.preventDefault();const f=new FormData(e.target),s=f.get('s'),c=f.get('c')||'—';
+ if(!s){$('#err').textContent='Pick a size to continue.';return}
+ const m=`Hi QUIET, I’d like to order:\n\n• ${cur.name}\n• Color: ${c}\n• Size: ${s}\n• Quantity: ${qty}\n• Total: ${money(cur.price*qty)}`;
+ location.href=`https://wa.me/${D.whatsapp.replace(/\D/g,'')}?text=${encodeURIComponent(m)}`;
+};
+</script></body></html>
